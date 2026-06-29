@@ -1,3 +1,14 @@
-export default function Die({ value }) {
-  return <button className="die">{value}</button>;
+export default function Die({ value, isHeld, onHold, id }) {
+  const styles = {
+    backgroundColor: isHeld ? "#59E391" : "white",
+  };
+  return (
+    <button
+      className={`die ${isHeld ? "held" : ""}`}
+      style={styles}
+      onClick={() => onHold(id)}
+    >
+      {value}
+    </button>
+  );
 }
