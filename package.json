@@ -11,10 +11,10 @@
     "nanoid": "^5.1.16",
     "react": "19.2.7",
     "react-confetti": "^6.4.0",
-    "react-dom": "19.2.7",
-    "vite": "latest"
+    "react-dom": "19.2.7"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "*"
+    "@vitejs/plugin-react": "*",
+    "vite": "^8.1.1"
   }
 }
