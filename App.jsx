@@ -4,21 +4,35 @@ import { nanoid } from "nanoid";
 
 export default function App() {
 
+
   function generateAllNewDice() {
     let randomNumbers = Array.from({ length: 10 }, (_, i) => {
-      return { value: Math.floor(Math.random() * 6 + 1), isHeld: false, id: nanoid() };
+      return {
+        value: Math.floor(Math.random() * 6 + 1),
+        isHeld: false,
+        id: nanoid(),
+      };
     });
     return randomNumbers;
   }
 
   const [dice, setDice] = useState(generateAllNewDice());
   function rollDice() {
-    setDice(generateAllNewDice());
-
+    setDice(prevDice =>
+      prevDice.map(die =>
+        die.isHeld
+          ? die
+          : { ...die, value: Math.floor(Math.random() * 6 + 1) },
+      ),
+    );
   }
 
   function hold(id) {
-    console.log(id)
+    setDice((prevDice) =>
+      prevDice.map((die) =>
+        die.id === id ? { ...die, isHeld: !die.isHeld } : die,
+      ),
+    );
   }
 
   return (
@@ -29,7 +43,7 @@ export default function App() {
             key={die.id}
             value={die.value}
             isHeld={die.isHeld}
-            id={die.id} 
+            id={die.id}
             onHold={hold}
           />
         ))}
