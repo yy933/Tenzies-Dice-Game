@@ -4,6 +4,8 @@ import { nanoid } from "nanoid";
 import Confetti from "react-confetti";
 
 export default function App() {
+  const [dice, setDice] = useState(generateAllNewDice());
+  const [rollCount, setRollCount] = useState(0);
   const newGameButtonRef = useRef(null);
 
   function generateAllNewDice() {
@@ -17,7 +19,6 @@ export default function App() {
     return randomNumbers;
   }
 
-  const [dice, setDice] = useState(generateAllNewDice());
   const gameWon =
     dice.every((die) => die.isHeld) &&
     dice.every((die) => die.value === dice[0].value);
@@ -29,6 +30,7 @@ export default function App() {
   function rollDice() {
     if (gameWon) {
       setDice(generateAllNewDice());
+      setRollCount(0);
     } else {
       setDice((prevDice) =>
         prevDice.map((die) =>
@@ -37,6 +39,7 @@ export default function App() {
             : { ...die, value: Math.floor(Math.random() * 6 + 1) },
         ),
       );
+      setRollCount((prevCount) => prevCount + 1);
     }
   }
 
@@ -57,10 +60,19 @@ export default function App() {
         )}
       </div>
       <h1 className="title">Tenzies</h1>
+      <div className="stats-container">
+        <p
+          className="roll-count"
+          aria-label={`You have rolled ${rollCount} times.`}
+        >
+          Counts：{rollCount}
+        </p>
+      </div>
       <p className="instructions">
         Roll until all dice are the same. Click each die to freeze it at its
         current value between rolls.
       </p>
+
       <div className="dice-container">
         {dice.map((die) => (
           <Die
