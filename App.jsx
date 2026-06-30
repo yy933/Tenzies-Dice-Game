@@ -124,7 +124,7 @@ export default function App() {
 
       <div className="dice-container">{diceElements}</div>
       <button ref={newGameButtonRef} className="roll-dice" onClick={rollDice}>
-        {gameWon ? "New Game" : "Roll"}
+        {gameWon || gameInit ? "New Game" : "Roll"}
       </button>
     </main>
   );
