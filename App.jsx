@@ -24,7 +24,19 @@ export default function App() {
     dice.every((die) => die.isHeld) &&
     dice.every((die) => die.value === dice[0].value);
 
-    // focus on the "New Game" button when the game ends
+  const gameInit = rollCount === 0;
+
+  const diceElements = dice.map((die) => (
+    <Die
+      key={die.id}
+      value={die.value}
+      isHeld={die.isHeld}
+      onHold={() => hold(die.id)}
+      isDisabled={gameWon || gameInit}
+    />
+  ));
+
+  // focus on the "New Game" button when the game ends
   useEffect(() => {
     if (gameWon) {
       newGameButtonRef.current.focus();
@@ -34,7 +46,7 @@ export default function App() {
   // timer logic
   useEffect(() => {
     let interval = null;
-    if (!gameWon) {
+    if (!gameWon && !gameInit) {
       interval = setInterval(() => {
         setTime((prevTime) => prevTime + 1);
       }, 1000);
@@ -47,7 +59,8 @@ export default function App() {
         console.log("Timer cleared!");
       }
     };
-  }, [gameWon]);
+  }, [gameWon, gameInit]);
+
   function rollDice() {
     if (gameWon) {
       setDice(generateAllNewDice());
@@ -109,17 +122,7 @@ export default function App() {
         current value between rolls.
       </p>
 
-      <div className="dice-container">
-        {dice.map((die) => (
-          <Die
-            key={die.id}
-            value={die.value}
-            isHeld={die.isHeld}
-            id={die.id}
-            onHold={hold}
-          />
-        ))}
-      </div>
+      <div className="dice-container">{diceElements}</div>
       <button ref={newGameButtonRef} className="roll-dice" onClick={rollDice}>
         {gameWon ? "New Game" : "Roll"}
       </button>
